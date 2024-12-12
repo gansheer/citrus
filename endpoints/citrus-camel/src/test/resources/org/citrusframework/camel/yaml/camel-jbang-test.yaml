@@ -4,6 +4,10 @@ status: "FINAL"
 actions:
   - camel:
       jbang:
+        plugin:
+          add: kubernetes
+  - camel:
+      jbang:
         run:
           args:
             - "--verbose"

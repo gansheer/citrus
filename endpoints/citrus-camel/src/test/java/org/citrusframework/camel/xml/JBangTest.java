@@ -47,9 +47,9 @@ public class JBangTest extends AbstractXmlActionTest {
         Assert.assertEquals(result.getName(), "CamelJBangTest");
         Assert.assertEquals(result.getMetaInfo().getAuthor(), "Christoph");
         Assert.assertEquals(result.getMetaInfo().getStatus(), TestCaseMetaInfo.Status.FINAL);
-        Assert.assertEquals(result.getActionCount(), 2L);
-        Assert.assertEquals(result.getTestAction(0).getClass(), CamelRunIntegrationAction.class);
-        Assert.assertEquals(result.getTestAction(0).getName(), "run-integration");
+        Assert.assertEquals(result.getActionCount(), 3L);
+        Assert.assertEquals(result.getTestAction(1).getClass(), CamelRunIntegrationAction.class);
+        Assert.assertEquals(result.getTestAction(1).getName(), "run-integration");
 
         int actionIndex = 0;
 

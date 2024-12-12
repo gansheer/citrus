@@ -32,6 +32,7 @@ import org.citrusframework.camel.jbang.CamelJBangSettings;
         "run",
         "stop",
         "verify",
+        "plugin",
 })
 public class JBang {
 
@@ -49,6 +50,9 @@ public class JBang {
 
     @XmlElement
     protected VerifyIntegration verify;
+
+    @XmlElement
+    protected Plugin plugin;
 
     public void setCamelVersion(String camelVersion) {
         this.camelVersion = camelVersion;
@@ -88,6 +92,14 @@ public class JBang {
 
     public VerifyIntegration getVerify() {
         return verify;
+    }
+
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public Plugin getPlugin() {
+        return plugin;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -471,6 +483,62 @@ public class JBang {
 
         public boolean isStopOnErrorStatus() {
             return stopOnErrorStatus;
+        }
+    }
+
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class Plugin {
+        @XmlAttribute
+        protected String add;
+        @XmlAttribute
+        protected String delete;
+        @XmlElement
+        protected RunIntegration.Args args;
+
+        @XmlAccessorType(XmlAccessType.FIELD)
+        @XmlType(name = "", propOrder = {
+                "args",
+        })
+        public static class Args {
+
+            @XmlElement(name = "argument")
+            protected List<String> args;
+
+            public List<String> getArgs() {
+                if (args == null) {
+                    args = new ArrayList<>();
+                }
+                return args;
+            }
+
+            public void setArgs(List<String> args) {
+                this.args = args;
+            }
+        }
+
+        public void setAdd(String name) {
+            this.add = name;
+        }
+
+        public String getAdd() {
+            return this.add;
+        }
+
+        public void setDelete(String name) {
+            this.delete = name;
+        }
+
+        public String getDelete() {
+            return this.delete;
+        }
+
+        public RunIntegration.Args getArgs() {
+            return args;
+        }
+
+        public void setArgs(RunIntegration.Args args) {
+            this.args = args;
         }
     }
 }

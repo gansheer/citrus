@@ -22,6 +22,7 @@ import org.citrusframework.DefaultTestCase;
 import org.citrusframework.TestCase;
 import org.citrusframework.TestCaseMetaInfo;
 import org.citrusframework.camel.CamelSettings;
+import org.citrusframework.camel.actions.CamelPluginAction;
 import org.citrusframework.camel.actions.CamelRunIntegrationAction;
 import org.citrusframework.camel.actions.CamelStopIntegrationAction;
 import org.citrusframework.camel.actions.CamelVerifyIntegrationAction;
@@ -47,11 +48,14 @@ public class JBangTest extends AbstractYamlActionTest {
         Assert.assertEquals(result.getName(), "CamelJBangTest");
         Assert.assertEquals(result.getMetaInfo().getAuthor(), "Christoph");
         Assert.assertEquals(result.getMetaInfo().getStatus(), TestCaseMetaInfo.Status.FINAL);
-        Assert.assertEquals(result.getActionCount(), 2L);
-        Assert.assertEquals(result.getTestAction(0).getClass(), CamelRunIntegrationAction.class);
-        Assert.assertEquals(result.getTestAction(0).getName(), "run-integration");
+        Assert.assertEquals(result.getActionCount(), 3L);
+        Assert.assertEquals(result.getTestAction(1).getClass(), CamelRunIntegrationAction.class);
+        Assert.assertEquals(result.getTestAction(1).getName(), "run-integration");
 
         int actionIndex = 0;
+
+        CamelPluginAction pluginAction = (CamelPluginAction) result.getTestAction(actionIndex++);
+        Assert.assertEquals(pluginAction.getPluginName(), "kubernetes");
 
         CamelRunIntegrationAction action = (CamelRunIntegrationAction) result.getTestAction(actionIndex++);
         Assert.assertEquals(action.getIntegrationName(), "hello-yaml");
