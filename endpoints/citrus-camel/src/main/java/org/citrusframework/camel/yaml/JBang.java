@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.citrusframework.camel.actions.AbstractCamelJBangAction;
+import org.citrusframework.camel.actions.CamelPluginAction;
 import org.citrusframework.camel.actions.CamelRunIntegrationAction;
 import org.citrusframework.camel.actions.CamelStopIntegrationAction;
 import org.citrusframework.camel.actions.CamelVerifyIntegrationAction;
@@ -34,6 +35,7 @@ public class JBang implements CamelActionBuilderWrapper<AbstractCamelJBangAction
     protected RunIntegration run;
     protected StopIntegration stop;
     protected VerifyIntegration verify;
+    protected Plugin plugin;
 
     public void setCamelVersion(String camelVersion) {
         this.camelVersion = camelVersion;
@@ -75,6 +77,12 @@ public class JBang implements CamelActionBuilderWrapper<AbstractCamelJBangAction
         return verify;
     }
 
+    public  void setPlugin(Plugin plugin) {  this.plugin = plugin; }
+
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
     @Override
     public AbstractCamelJBangAction.Builder<?, ?> getBuilder() {
         AbstractCamelJBangAction.Builder<?, ?> builder;
@@ -84,6 +92,8 @@ public class JBang implements CamelActionBuilderWrapper<AbstractCamelJBangAction
             builder = stop.getBuilder();
         } else if (verify != null) {
             builder = verify.getBuilder();
+        } else if (plugin != null) {
+            builder = plugin.getBuilder();
         } else {
             throw new CitrusRuntimeException("Missing Camel JBang action specification");
         }
@@ -338,6 +348,26 @@ public class JBang implements CamelActionBuilderWrapper<AbstractCamelJBangAction
 
         @Override
         public CamelVerifyIntegrationAction.Builder getBuilder() {
+            return builder;
+        }
+    }
+
+    public static class Plugin implements CamelActionBuilderWrapper<CamelPluginAction.Builder> {
+
+        private final CamelPluginAction.Builder builder = new CamelPluginAction.Builder();
+
+        public void setAdd(String pluginName) {
+            this.builder.pluginOperation("add");
+            this.builder.pluginName(pluginName);
+        }
+
+
+        public void setArgs(List<String> args) {
+            builder.withArgs(args.toArray(String[]::new));
+        }
+
+        @Override
+        public CamelPluginAction.Builder getBuilder() {
             return builder;
         }
     }

@@ -30,6 +30,7 @@ import org.citrusframework.TestActionBuilder;
 import org.citrusframework.TestActor;
 import org.citrusframework.camel.actions.AbstractCamelAction;
 import org.citrusframework.camel.actions.CamelControlBusAction;
+import org.citrusframework.camel.actions.CamelPluginAction;
 import org.citrusframework.camel.actions.CamelRunIntegrationAction;
 import org.citrusframework.camel.actions.CamelStopIntegrationAction;
 import org.citrusframework.camel.actions.CamelVerifyIntegrationAction;
@@ -236,8 +237,18 @@ public class Camel implements TestActionBuilder<TestAction>, ReferenceResolverAw
             builder.kameletsVersion(jbang.getKameletsVersion());
 
             this.builder = builder;
-        }
+        } else if (jbang.getPlugin() != null){
+            CamelPluginAction.Builder builder = new CamelPluginAction.Builder();
 
+            if(jbang.getPlugin().getAdd() != null) {
+                builder.pluginOperation("add").pluginName(jbang.getPlugin().getAdd());
+            }
+            if (jbang.getPlugin().getArgLine() != null) {
+                builder.withArgs(jbang.getPlugin().getArgLine().split(" "));
+            }
+
+            this.builder = builder;
+        }
         return this;
     }
 

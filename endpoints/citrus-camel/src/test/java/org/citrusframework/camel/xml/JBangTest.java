@@ -22,6 +22,7 @@ import org.citrusframework.DefaultTestCase;
 import org.citrusframework.TestCase;
 import org.citrusframework.TestCaseMetaInfo;
 import org.citrusframework.camel.CamelSettings;
+import org.citrusframework.camel.actions.CamelPluginAction;
 import org.citrusframework.camel.actions.CamelRunIntegrationAction;
 import org.citrusframework.camel.actions.CamelStopIntegrationAction;
 import org.citrusframework.camel.actions.CamelVerifyIntegrationAction;
@@ -52,6 +53,44 @@ public class JBangTest extends AbstractXmlActionTest {
         Assert.assertEquals(result.getTestAction(0).getName(), "run-integration");
 
         int actionIndex = 0;
+
+        CamelRunIntegrationAction action = (CamelRunIntegrationAction) result.getTestAction(actionIndex++);
+        Assert.assertEquals(action.getIntegrationName(), "hello-xml");
+
+        CamelVerifyIntegrationAction verifyAction = (CamelVerifyIntegrationAction) result.getTestAction(actionIndex);
+        Assert.assertEquals(verifyAction.getIntegrationName(), "hello-xml");
+
+        Assert.assertTrue(result instanceof DefaultTestCase);
+        Assert.assertEquals(((DefaultTestCase) result).getFinalActions().size(), 1);
+
+        CamelStopIntegrationAction stopAction = (CamelStopIntegrationAction) ((DefaultTestCase) result).getFinalActions().get(0);
+        Assert.assertEquals(stopAction.getIntegrationName(), "hello-xml");
+    }
+
+    @Test
+    public void shouldLoadCamelPluginActions() throws Exception {
+        XmlTestLoader testLoader = createTestLoader("classpath:org/citrusframework/camel/xml/camel-jbang-plugin-test.xml");
+
+        CamelContext citrusCamelContext = new DefaultCamelContext();
+        citrusCamelContext.start();
+
+        context.getReferenceResolver().bind(CamelSettings.getContextName(), citrusCamelContext);
+        context.getReferenceResolver().bind("camelContext", citrusCamelContext);
+
+        testLoader.load();
+
+        TestCase result = testLoader.getTestCase();
+        Assert.assertEquals(result.getName(), "CamelJBangTest");
+        Assert.assertEquals(result.getMetaInfo().getAuthor(), "Christoph");
+        Assert.assertEquals(result.getMetaInfo().getStatus(), TestCaseMetaInfo.Status.FINAL);
+        Assert.assertEquals(result.getActionCount(), 3L);
+        Assert.assertEquals(result.getTestAction(1).getClass(), CamelRunIntegrationAction.class);
+        Assert.assertEquals(result.getTestAction(1).getName(), "run-integration");
+
+        int actionIndex = 0;
+
+        CamelPluginAction pluginAction = (CamelPluginAction) result.getTestAction(actionIndex++);
+        Assert.assertEquals(pluginAction.getPluginName(), "kubernetes");
 
         CamelRunIntegrationAction action = (CamelRunIntegrationAction) result.getTestAction(actionIndex++);
         Assert.assertEquals(action.getIntegrationName(), "hello-xml");

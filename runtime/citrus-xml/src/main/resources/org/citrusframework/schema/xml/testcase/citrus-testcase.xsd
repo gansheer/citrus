@@ -1039,6 +1039,16 @@
           </xs:annotation>
           <xs:complexType>
             <xs:choice>
+              <xs:element name="plugin">
+                <xs:annotation>
+                  <xs:documentation>Configures plugins.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence/>
+                  <xs:attribute name="add" type="xs:string"/>
+                  <xs:attribute name="args" type="xs:string"/>
+                </xs:complexType>
+              </xs:element>
               <xs:element name="run">
                 <xs:annotation>
                   <xs:documentation>Runs a Camel integration via JBang</xs:documentation>

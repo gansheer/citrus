@@ -32,6 +32,7 @@ import org.citrusframework.camel.jbang.CamelJBangSettings;
         "run",
         "stop",
         "verify",
+        "plugin",
 })
 public class JBang {
 
@@ -49,6 +50,9 @@ public class JBang {
 
     @XmlElement
     protected VerifyIntegration verify;
+
+    @XmlElement
+    protected Plugin plugin;
 
     public void setCamelVersion(String camelVersion) {
         this.camelVersion = camelVersion;
@@ -88,6 +92,14 @@ public class JBang {
 
     public VerifyIntegration getVerify() {
         return verify;
+    }
+
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public Plugin getPlugin() {
+        return plugin;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -472,5 +484,31 @@ public class JBang {
         public boolean isStopOnErrorStatus() {
             return stopOnErrorStatus;
         }
+    }
+
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class Plugin {
+        @XmlAttribute(name = "add")
+        protected String add;
+        @XmlAttribute(name = "args")
+        protected String argLine;
+
+        public void setAdd(String name) {
+            this.add = name;
+        }
+
+        public String getAdd() {
+            return this.add;
+        }
+
+        public String getArgLine() {
+            return argLine;
+        }
+
+        public void setArgLine(String argLine) {
+            this.argLine = argLine;
+        }
+
     }
 }
