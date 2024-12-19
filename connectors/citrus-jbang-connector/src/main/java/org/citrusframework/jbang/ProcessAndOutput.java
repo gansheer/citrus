@@ -159,11 +159,13 @@ public class ProcessAndOutput {
     public Long getProcessId(String app) {
 
         try {
+            LOG.info("Checking process with pid {} anb command {}.", process.pid(), process.info().commandLine());
             if (app != null && isUnix()) {
                 // wait for descendant process to be available
                 await().atMost(5000L, TimeUnit.MILLISECONDS)
                         .until(() -> process.descendants().findAny().isPresent());
                 return process.descendants()
+                        .peek(p -> LOG.info("Checking descendant process with pid {} anb command {}.", p.pid(), p.info().commandLine()))
                         .filter(p -> p.info().commandLine().orElse("").contains(app))
                         .findFirst()
                         .map(ProcessHandle::pid)

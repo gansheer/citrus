@@ -124,7 +124,7 @@ public class CamelRunIntegrationAction extends AbstractCamelJBangAction {
             verifyProcessIsAlive(pao, name);
 
             pao.setApp(integrationToRun.getFileName().toString());
-            Long pid = pao.getParentProcessId();
+            Long pid = pao.getProcessId();
 
             context.setVariable(name + ":pid", pid);
             context.setVariable(name + ":process:" + pid, pao);
