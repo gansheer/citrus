@@ -41,7 +41,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,13 +55,11 @@ jobs:
         run: |
           java -version
           ./mvnw -version
+
       - name: Build Citrus
         run: |
-          echo "Install JBang via SDKMAN"
-
-          curl -s "https://get.sdkman.io" | bash 
-          source "/home/runner/.sdkman/bin/sdkman-init.sh"
-          sdk install jbang
+          curl -Ls https://sh.jbang.dev | bash -s - app setup
+          export PATH=$PATH:$HOME/.jbang/bin
           
           jbang --version
           
