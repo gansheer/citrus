@@ -56,10 +56,11 @@ jobs:
           java -version
           ./mvnw -version
 
-      - id: setup-jbang
-        name: Setup JBang
-        uses: jbangdev/setup-jbang@main
-
       - name: Build Citrus
         run: |
+          curl -Ls https://sh.jbang.dev | bash -s - app setup
+          export PATH=$PATH:$HOME/.jbang/bin
+          
+          jbang --version
+          
           ./mvnw --no-transfer-progress -T1C install
