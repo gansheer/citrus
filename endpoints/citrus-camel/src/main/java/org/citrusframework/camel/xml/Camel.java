@@ -243,6 +243,9 @@ public class Camel implements TestActionBuilder<TestAction>, ReferenceResolverAw
             if(jbang.getPlugin().getAdd() != null) {
                 builder.pluginOperation("add").pluginName(jbang.getPlugin().getAdd());
             }
+            if(jbang.getPlugin().getCommand() != null) {
+                builder.pluginOperation("command").pluginName(jbang.getPlugin().getCommand());
+            }
             if (jbang.getPlugin().getArgLine() != null) {
                 builder.withArgs(jbang.getPlugin().getArgLine().split(" "));
             }

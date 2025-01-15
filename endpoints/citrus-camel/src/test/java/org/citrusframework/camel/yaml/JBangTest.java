@@ -83,25 +83,25 @@ public class JBangTest extends AbstractYamlActionTest {
         Assert.assertEquals(result.getName(), "CamelJBangTest");
         Assert.assertEquals(result.getMetaInfo().getAuthor(), "Christoph");
         Assert.assertEquals(result.getMetaInfo().getStatus(), TestCaseMetaInfo.Status.FINAL);
-        Assert.assertEquals(result.getActionCount(), 3L);
-        Assert.assertEquals(result.getTestAction(1).getClass(), CamelRunIntegrationAction.class);
-        Assert.assertEquals(result.getTestAction(1).getName(), "run-integration");
+        Assert.assertEquals(result.getActionCount(), 2L);
 
         int actionIndex = 0;
 
-        CamelPluginAction pluginAction = (CamelPluginAction) result.getTestAction(actionIndex++);
-        Assert.assertEquals(pluginAction.getPluginName(), "kubernetes");
+        CamelPluginAction pluginAddAction = (CamelPluginAction) result.getTestAction(actionIndex++);
+        Assert.assertEquals(pluginAddAction.getPluginName(), "kubernetes");
+        Assert.assertEquals(pluginAddAction.getPluginOperation(), "add");
+        Assert.assertEquals(pluginAddAction.getArgs().get(0), "--command");
+        Assert.assertEquals(pluginAddAction.getArgs().get(1), "kubernetes");
 
-        CamelRunIntegrationAction action = (CamelRunIntegrationAction) result.getTestAction(actionIndex++);
-        Assert.assertEquals(action.getIntegrationName(), "hello-yaml");
+        CamelPluginAction pluginRunAction = (CamelPluginAction) result.getTestAction(actionIndex);
+        Assert.assertEquals(pluginRunAction.getPluginName(), "kubernetes");
+        Assert.assertEquals(pluginRunAction.getPluginOperation(), "command");
+        Assert.assertEquals(pluginRunAction.getArgs().get(0), "export");
 
-        CamelVerifyIntegrationAction verifyAction = (CamelVerifyIntegrationAction) result.getTestAction(actionIndex);
-        Assert.assertEquals(verifyAction.getIntegrationName(), "hello-yaml");
 
-        Assert.assertTrue(result instanceof DefaultTestCase);
-        Assert.assertEquals(((DefaultTestCase) result).getFinalActions().size(), 1);
-
-        CamelStopIntegrationAction stopAction = (CamelStopIntegrationAction) ((DefaultTestCase) result).getFinalActions().get(0);
-        Assert.assertEquals(stopAction.getIntegrationName(), "hello-yaml");
+        CamelPluginAction pluginDeleteAction = (CamelPluginAction) ((DefaultTestCase) result).getFinalActions().get(0);
+        Assert.assertEquals(pluginDeleteAction.getPluginName(), "kubernetes");
+        Assert.assertEquals(pluginDeleteAction.getPluginOperation(), "command");
+        Assert.assertEquals(pluginDeleteAction.getArgs().get(0), "delete");
     }
 }

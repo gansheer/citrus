@@ -491,6 +491,8 @@ public class JBang {
     public static class Plugin {
         @XmlAttribute(name = "add")
         protected String add;
+        @XmlAttribute(name = "command")
+        protected String command;
         @XmlAttribute(name = "args")
         protected String argLine;
 
@@ -500,6 +502,14 @@ public class JBang {
 
         public String getAdd() {
             return this.add;
+        }
+
+        public String getCommand() {
+            return command;
+        }
+
+        public void setCommand(String command) {
+            this.command = command;
         }
 
         public String getArgLine() {

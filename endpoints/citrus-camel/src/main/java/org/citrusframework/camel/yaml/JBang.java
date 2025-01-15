@@ -361,6 +361,11 @@ public class JBang implements CamelActionBuilderWrapper<AbstractCamelJBangAction
             this.builder.pluginName(pluginName);
         }
 
+        public void setCommand(String pluginName) {
+            this.builder.pluginOperation("command");
+            this.builder.pluginName(pluginName);
+        }
+
 
         public void setArgs(List<String> args) {
             builder.withArgs(args.toArray(String[]::new));

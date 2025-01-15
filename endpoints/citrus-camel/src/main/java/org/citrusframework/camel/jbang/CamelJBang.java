@@ -240,10 +240,10 @@ public class CamelJBang {
         return this;
     }
 
-    public List<String> getPlugins() {
+    public Map<String, String> getPlugins() {
         ProcessAndOutput p = camelApp.run("plugin","get");
         String output = p.getOutput();
-        List<String> installedPlugins = new ArrayList<>();
+        Map<String, String> installedPlugins = new HashMap<>();
         if (output.isBlank()) {
             return installedPlugins;
         }
@@ -253,7 +253,8 @@ public class CamelJBang {
             String line;
             while ((line = reader.readLine()) != null) {
                 List<String> values = new ArrayList<>(Arrays.asList(line.trim().split("\\s+")));
-                installedPlugins.add(values.get(0));
+                // Add each plugin name + command
+                installedPlugins.put(values.get(0), values.get(1));
             }
             return installedPlugins;
         } catch (IOException e) {

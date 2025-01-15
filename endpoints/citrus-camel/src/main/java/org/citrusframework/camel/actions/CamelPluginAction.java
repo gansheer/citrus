@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static java.lang.String.format;
 
 public class CamelPluginAction extends AbstractCamelJBangAction {
 
@@ -32,24 +35,40 @@ public class CamelPluginAction extends AbstractCamelJBangAction {
     public String getPluginName() {
         return pluginName;
     }
+    public String getPluginOperation() {
+        return pluginOperation;
+    }
+
+    public List<String> getArgs() {
+        return args;
+    }
 
     @Override
     public void doExecute(TestContext context) {
         logger.debug("Plugin action {}:{}", pluginOperation, pluginName);
+
         logger.info("Checking Camel plugins installed");
-        List<String> installedPlugins = camelJBang().getPlugins();
+        Map<String, String> installedPlugins = camelJBang().getPlugins();
 
         logger.info("Executing plugin operation");
         switch (pluginOperation){
             case "add":
-                if(!installedPlugins.contains(pluginName)){
-                    logger.debug("Installing plugin {}", pluginName);
+                logger.debug("Install plugin {}", pluginName);
+                if(!installedPlugins.containsKey(pluginName)){
                     List<String> fullArgs = List.of(pluginOperation, pluginName);
-                    // TODO add args
-                    //fullArgs.addAll(args);
+                    fullArgs.addAll(args);
                     camelJBang().camelApp().run("plugin", fullArgs.toArray(String[]::new));
                 } else {
                     logger.debug("Plugin {} already installed", pluginName);
+                }
+                break;
+            case "command":
+                logger.debug("Execute plugin command {}", pluginName);
+                if(installedPlugins.containsValue(pluginName)) {
+                    List<String> fullArgs = List.copyOf(args);
+                    camelJBang().camelApp().run(pluginName, fullArgs.toArray(String[]::new));
+                } else{
+                    throw new CitrusRuntimeException(format("Camel plugin command '%s' not available", pluginName));
                 }
                 break;
             default:

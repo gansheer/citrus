@@ -27,13 +27,22 @@
     </camel>
     <camel>
       <jbang>
+        <plugin>
+          <run>
+            <integration file="classpath:org/citrusframework/camel/integration/route.yaml"/>
+            <image registry="registry.minikube" builder="docker"/>
+            
+
+          </run>
+
+        </plugin>
+      </jbang>
+    </camel>
+    <camel>
+      <jbang>
         <run args="--verbose">
           <integration name="hello-xml"
-                       file="classpath:org/citrusframework/camel/integration/route.yaml">
-            <system-properties>
-              <property name="greeting" value="Hello Camel"/>
-            </system-properties>
-          </integration>
+                       file="classpath:org/citrusframework/camel/integration/route.yaml"/>
         </run>
       </jbang>
     </camel>

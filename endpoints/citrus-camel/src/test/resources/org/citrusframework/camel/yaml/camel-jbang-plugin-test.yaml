@@ -11,23 +11,24 @@ actions:
             - "kubernetes"
   - camel:
       jbang:
-        run:
-          args:
-            - "--verbose"
-          integration:
-            name: "hello-yaml"
-            file: "classpath:org/citrusframework/camel/integration/route.yaml"
-            systemProperties:
-              properties:
-                - name: greeting
-                  value: Hello Camel
-  - camel:
-      jbang:
-        verify:
-          integration: "hello-yaml"
-          logMessage: "HELLO CAMEL #10"
+        plugin:
+          kubernetes:
+            export:
+              integration:
+                file: "classpath:org/citrusframework/camel/integration/route.yaml"
+              imageRegistry: "registry.minikube"
+              imageBuilder: "docker"
+              buildProperties:
+                - "quarkus.kubernetes.image-pull-policy=Never"
+              traits:
+                - "container.image-pull-policy=IfNotPresent"
+                - "container.image-push=true"
+
 finally:
   - camel:
       jbang:
-        stop:
-          integration: "hello-yaml"
+        plugin:
+          kubernetes:
+            delete:
+              integration:
+                name: "test"
